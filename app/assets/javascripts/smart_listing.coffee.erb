@@ -4,7 +4,7 @@ $.rails.href = (element) ->
 
 class window.SmartListing
   class Config
-    @options: <%= SmartListing.config.dump_json %>
+    @options: <%= SmartListing.config(:default).dump_json %>
 
     @merge: (d) ->
       $.extend true, @options, d || $("body").data("smart-listing-config")
@@ -397,12 +397,13 @@ $.fn.smart_listing_controls = () ->
     smart_listing = $("##{controls.data(SmartListing.config.data_attribute("main"))}")
     reset = controls.find(SmartListing.config.class_name("controls_reset"))
 
-    controls.submit ->
-      # setup smart listing params, reload and don"t actually submit controls form
-      reload(controls)
-      false
+    # controls.submit ->
+    #   # setup smart listing params, reload and don"t actually submit controls form
+    #   reload(controls)
+    #   true
 
     controls.find("input, select").change () ->
+      controls.submit()
       unless $(this).data(SmartListing.config.data_attribute("observed")) # do not submit controls form when changed field is observed (observing submits form by itself)
         reload(controls)
 
