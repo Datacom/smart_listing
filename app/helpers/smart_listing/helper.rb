@@ -180,6 +180,7 @@ module SmartListing
       private
 
       def sanitize_params params
+        params = params.permit! if params.respond_to?(:permit!)
         params.merge(UNSAFE_PARAMS)
       end
 
@@ -229,7 +230,7 @@ module SmartListing
     end
 
     def smart_listing_render name = controller_name, *args
-      options = args.extract_options!
+      options = args.dup.extract_options!
       smart_listing_for(name, *args) do |smart_listing|
         concat(smart_listing.render_list(options[:locals]))
       end
